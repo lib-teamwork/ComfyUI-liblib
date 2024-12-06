@@ -44,3 +44,5 @@
 - 生成图片时会实时查询状态直到完成
 - 图片尺寸需要在合理范围内(512-2048)
 - 单次可生成1-4张图片
+## 例子
+![image](https://github.com/user-attachments/assets/9b271a0b-80f7-4c5d-b8df-baa8bef4769d)
