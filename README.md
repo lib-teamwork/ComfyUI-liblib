@@ -1,48 +1,53 @@
-# ComfyUI-liblib
+<img width="392" alt="image" src="https://github.com/user-attachments/assets/9a6cbcfd-0c65-46b2-bcc9-bf287cb9c91f"># ComfyUI-liblib
 
-这是一个用于在 ComfyUI 中调用 LibLib AI API 的自定义节点集合。
+A custom node collection for using the LibLib AI API within ComfyUI.
 
-## 功能节点
+## Functional Nodes
 
 ### LibLib Auth Info
-用于创建认证信息,需要输入:
-- appkey: LibLib API 的 AppKey
-- appsecret: LibLib API 的 AppSecret
+Creates authentication information. Requires the following inputs:
+- **appkey**: The AppKey for the LibLib API.
+- **appsecret**: The AppSecret for the LibLib API.
 
 ### Save LibLib Auth Info
-将认证信息保存到配置文件中,方便后续使用。
+Saves the authentication information to a configuration file for convenient reuse.
 
-### Load LibLib Auth Info 
-从配置文件中加载已保存的认证信息。
+### Load LibLib Auth Info
+Loads previously saved authentication information from the configuration file.
 
 ### LibLib Text to Image
-文本生成图片节点,支持:
-- 输入提示词(prompt)
-- 选择模型类型(SDXL/FLUX1)
-- 设置生成图片数量(1-4张)
-- 可选择预设尺寸比例(方形1024x1024/竖版768x1024/横版1280x720)
-- 可自定义宽高(512-2048之间)
+A node for generating images from text. Features include:
+- Input for **prompt**.
+- Selection of model type (**SDXL/FLUX1**).
+- Option to set the number of images to generate (1-4).
+- Preset aspect ratios:
+  - **Square** (1024x1024)
+  - **Portrait** (768x1024)
+  - **Landscape** (1280x720)
+- Customizable width and height (range: 512-2048).
 
-### LibLib Image to Image
-图片生成图片节点,支持:
-- 输入参考图片
-- 输入提示词(prompt) 
-- 选择模型类型(SDXL/FLUX1)
-- 设置生成图片数量(1-4张)
+### LibLib Image to Image (WIP)
+A node for generating images from reference images. Features include:
+- Input for a reference image.
+- Input for **prompt**.
+- Selection of model type (**SDXL/FLUX1**).
+- Option to set the number of images to generate (1-4).
 
-## 使用流程
+## Usage Workflow
 
-1. 首先使用 LibLib Auth Info 节点创建认证信息
-2. 可以用 Save LibLib Auth Info 保存认证信息
-3. 后续可以用 Load LibLib Auth Info 加载认证信息
-4. 将认证信息连接到 Text to Image 或 Image to Image 节点
-5. 设置相应参数开始生成图片
+1. Use the **LibLib Auth Info** node to create authentication information.
+2. Optionally, save the authentication information using the **Save LibLib Auth Info** node.
+3. Load saved authentication information using the **Load LibLib Auth Info** node.
+4. Connect the authentication information to the **Text to Image** or **Image to Image** node.
+5. Configure the desired parameters and start generating images.
 
-## 注意事项
+## Notes
 
-- 需要先在 LibLib AI 平台注册并获取 AppKey 和 AppSecret
-- 生成图片时会实时查询状态直到完成
-- 图片尺寸需要在合理范围内(512-2048)
-- 单次可生成1-4张图片
-## 例子
-![image](https://github.com/user-attachments/assets/9b271a0b-80f7-4c5d-b8df-baa8bef4769d)
+- Registration on the LibLib AI platform is required to obtain the AppKey and AppSecret.
+- The generation process involves real-time status checks until completion.
+- Ensure the image dimensions are within the valid range (512-2048).
+- A single request can generate 1-4 images.
+
+## Example
+<img width="1299" alt="image" src="https://github.com/user-attachments/assets/f36cceaa-e77a-4860-9659-ef21d02fabca">
+
