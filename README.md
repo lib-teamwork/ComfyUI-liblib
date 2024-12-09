@@ -1,4 +1,4 @@
-<img width="392" alt="image" src="https://github.com/user-attachments/assets/9a6cbcfd-0c65-46b2-bcc9-bf287cb9c91f"># ComfyUI-liblib
+# ComfyUI-liblib
 
 A custom node collection for using the LibLib AI API within ComfyUI.
 
