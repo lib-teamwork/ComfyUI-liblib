@@ -1,0 +1,137 @@
+{
+  "last_node_id": 24,
+  "last_link_id": 20,
+  "nodes": [
+    {
+      "id": 22,
+      "type": "PreviewImage",
+      "pos": {
+        "0": 1364,
+        "1": 384
+      },
+      "size": {
+        "0": 210,
+        "1": 26
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 18
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 21,
+      "type": "LibLibImageToImage",
+      "pos": {
+        "0": 766,
+        "1": 381
+      },
+      "size": {
+        "0": 400,
+        "1": 200
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "auth_info",
+          "type": "LIB_LIB_AUTH_INFO",
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            18
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LibLibImageToImage"
+      },
+      "widgets_values": [
+        "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/e8b85964-3acb-4a23-9aa2-dd53b2b1bb30/original=true,quality=90/43357087.jpeg",
+        "Color style",
+        "Star-3-Alpha",
+        1
+      ]
+    },
+    {
+      "id": 24,
+      "type": "LibLibAuthInfo",
+      "pos": {
+        "0": 326,
+        "1": 380
+      },
+      "size": {
+        "0": 315,
+        "1": 82
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "auth_info",
+          "type": "LIB_LIB_AUTH_INFO",
+          "links": [
+            20
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LibLibAuthInfo"
+      },
+      "widgets_values": [
+        "",
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      18,
+      21,
+      0,
+      22,
+      0,
+      "IMAGE"
+    ],
+    [
+      20,
+      24,
+      0,
+      21,
+      0,
+      "LIB_LIB_AUTH_INFO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6830134553650705,
+      "offset": [
+        81.69479661060087,
+        46.82759758512092
+      ]
+    }
+  },
+  "version": 0.4
+}
