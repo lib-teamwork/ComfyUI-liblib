@@ -1,0 +1,137 @@
+{
+  "last_node_id": 23,
+  "last_link_id": 19,
+  "nodes": [
+    {
+      "id": 14,
+      "type": "SaveImage",
+      "pos": {
+        "0": 1240,
+        "1": 260
+      },
+      "size": {
+        "0": 315,
+        "1": 270
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 14
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "SaveImage"
+      },
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 13,
+      "type": "LibLibTextToImage",
+      "pos": {
+        "0": 720,
+        "1": 260
+      },
+      "size": {
+        "0": 400,
+        "1": 200
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "auth_info",
+          "type": "LIB_LIB_AUTH_INFO",
+          "link": 19
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            14
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LibLibTextToImage"
+      },
+      "widgets_values": [
+        "1 girl,lotus leaf,masterpiece,best quality,finely detail,highres,8k,beautiful and aesthetic,no watermark,",
+        "Star-3-Alpha",
+        1,
+        "square:1024x1024",
+        0,
+        0
+      ]
+    },
+    {
+      "id": 23,
+      "type": "LoadLibLibAuthInfo",
+      "pos": {
+        "0": 350,
+        "1": 260
+      },
+      "size": {
+        "0": 264.5999755859375,
+        "1": 26
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "auth_info",
+          "type": "LIB_LIB_AUTH_INFO",
+          "links": [
+            19
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadLibLibAuthInfo"
+      }
+    }
+  ],
+  "links": [
+    [
+      14,
+      13,
+      0,
+      14,
+      0,
+      "IMAGE"
+    ],
+    [
+      19,
+      23,
+      0,
+      13,
+      0,
+      "LIB_LIB_AUTH_INFO"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6830134553650705,
+      "offset": [
+        81.69479661060087,
+        46.82759758512092
+      ]
+    }
+  },
+  "version": 0.4
+}

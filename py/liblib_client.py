@@ -11,35 +11,38 @@ import json
 from enum import Enum
 from PIL import Image
 
-class ModelType(Enum):
-    SDXL = "classic"    # 经典版
-    FLUX1 = "ultra"     # 旗舰版
-    
-TEMPLATE_UUID = {
-    "text2img": {
-        "classic": "3af36dd5a61e4da88c6cb5eb57a8fe2e",
-        "ultra": "5d7e67009b344550bc1aa6ccbfa1d7f4"
-    },
-    "img2img": {
-        "classic": "e653a58128d34d1dbc231a03e4fedd6f",
-        "ultra": "07e00af4fc464c7ab55ff906f8acf1b7"
+MODEL_INFO = [
+    {
+        "template_uuid": "3af36dd5a61e4da88c6cb5eb57a8fe2e",
+        "model_name": "Star-3-Alpha",
+        "url_type":"ultra",
+        "text2img_template_uuid":"5d7e67009b344550bc1aa6ccbfa1d7f4",
+        "img2img_template_uuid":"07e00af4fc464c7ab55ff906f8acf1b7",
     }
-}
+]
+
+DEFAULT_MODEL_INFO = MODEL_INFO[0]
+
+def find_model_by_name(model_name) -> dict:
+    for info in MODEL_INFO:
+        if info["model_name"] == model_name:
+            return info
+    return None
 
 class GenerateStatus(Enum):
-    PENDING = 1     # 等待执行
-    PROCESSING = 2  # 执行中
-    GENERATED = 3   # 已生图
-    AUDITING = 4    # 审核中
-    COMPLETED = 5   # 成功
-    FAILED = 6      # 失败
+    PENDING = 1     # Waiting to execute
+    PROCESSING = 2  # In progress
+    GENERATED = 3   # Image generated
+    AUDITING = 4    # Under review
+    COMPLETED = 5   # Success
+    FAILED = 6      # Failed
 
 class AuditStatus(Enum):
-    PENDING = 1     # 待审核
-    PROCESSING = 2  # 审核中
-    PASSED = 3      # 审核通过
-    BLOCKED = 4     # 审核拦截
-    FAILED = 5      # 审核失败
+    PENDING = 1     # Pending review
+    PROCESSING = 2  # Under review
+    PASSED = 3      # Review passed
+    BLOCKED = 4     # Review blocked
+    FAILED = 5      # Review failed
 
 class GeneratedImage:
     def __init__(self, data: dict):
@@ -64,18 +67,18 @@ class LibLibClient:
 
     def _make_signature(self, uri):
         """
-        生成签名
+        Generate signature
         """
-        # 当前毫秒时间戳
+        # Current timestamp in milliseconds
         timestamp = str(int(time.time() * 1000))
-        # 随机字符串
+        # Random string
         signature_nonce = str(uuid.uuid4())
-        # 拼接请求数据
+        # Concatenate request data
         content = '&'.join((uri, timestamp, signature_nonce))
         
-        # 生成签名
+        # Generate signature
         digest = hmac.new(self._appsecret.encode(), content.encode(), sha1).digest()
-        # 移除为了补全base64位数而填充的尾部等号
+        # Remove padding equals signs added to complete base64 length
         sign = base64.urlsafe_b64encode(digest).rstrip(b'=').decode()
         
         return sign, timestamp, signature_nonce
@@ -98,27 +101,32 @@ class LibLibClient:
             json=params
         )
         
+        if response.status_code != 200:
+            raise ValueError(f"Request failed with status code {response.status_code}", response.text)
+        
         data = response.json()
         if data.get('code') != 0:
-            raise ValueError(data.get('msg', '未知错误'))
+            raise ValueError(data.get('msg', 'Unknown error'))
             
         return data['data']
 
-    def text_to_image(self, prompt, model_type=ModelType.SDXL, aspect_ratio=None,
+    def text_to_image(self, prompt, model_name=DEFAULT_MODEL_INFO['model_name'], aspect_ratio=None,
                      width=None, height=None, img_count=1):
         """
-        文生图接口
-        model_type: ModelType.SDXL (经典版) 或 ModelType.FLUX1 (旗舰版)
+        Text to image interface
+        model_name: Star-3-Alpha
         """
-        uri = f"/api/generate/webui/text2img/{model_type.value}"
+        
+        model_info = find_model_by_name(model_name)
+        uri = f"/api/generate/webui/text2img/{model_info['url_type']}"
         
 
         
         if width is not None and (width < 512 or width > 2048):
-            raise ValueError("宽度参数无效（必须在512到2048之间）")
+            raise ValueError("Invalid width parameter (must be between 512 and 2048)")
         
         if height is not None and (height < 512 or height > 2048):
-            raise ValueError("高度参数无效（必须在512到2048之间）")
+            raise ValueError("Invalid height parameter (must be between 512 and 2048)")
         if width is not None and height is not None:
             image_size = {"width": width, "height": height}
             aspect_ratio = None
@@ -126,16 +134,16 @@ class LibLibClient:
             image_size = None
             
         if aspect_ratio is None and image_size is None:   
-            raise ValueError("必须指定至少一个尺寸参数")
+            raise ValueError("At least one size parameter must be specified")
         
         if aspect_ratio is not None and aspect_ratio not in ["square", "portrait", "landscape"]:
-            raise ValueError("无效的宽高比参数")
+            raise ValueError("Invalid aspect ratio parameter")
         
         if img_count < 1 or img_count > 4:
-            raise ValueError("图片数量参数无效（必须在1到4之间）")
+            raise ValueError("Invalid image count parameter (must be between 1 and 4)")
             
         params = {
-            "templateUuid": TEMPLATE_UUID["text2img"][model_type.value],
+            "templateUuid": model_info['text2img_template_uuid'],
             "generateParams": {
                 "prompt": prompt,
                 "imgCount": img_count
@@ -150,18 +158,19 @@ class LibLibClient:
             
         return self._make_request(uri, params)
 
-    def image_to_image(self, prompt, image_url, model_type=ModelType.SDXL, img_count=1):
+    def image_to_image(self, prompt, image_url, model_name=DEFAULT_MODEL_INFO['model_name'], img_count=1):
         """
-        图生图接口
-        model_type: ModelType.SDXL (经典版) 或 ModelType.FLUX1 (旗舰版)
+        Image to image interface
+        model_name: Star-3-Alpha
         """
-        uri = f"/api/generate/webui/img2img/{model_type.value}"
+        model_info = find_model_by_name(model_name)
+        uri = f"/api/generate/webui/img2img/{model_info['url_type']}"
         
         if img_count < 1 or img_count > 4:
-            raise ValueError("图片数量参数无效（必须在1到4之间）")
+            raise ValueError("Invalid image count parameter (must be between 1 and 4)")
             
         params = {
-            "templateUuid": TEMPLATE_UUID["img2img"][model_type.value],
+            "templateUuid": model_info['img2img_template_uuid'],
             "generateParams": {
                 "prompt": prompt,
                 "sourceImage": image_url,
@@ -173,8 +182,8 @@ class LibLibClient:
 
     def query_generate_status(self, generate_uuid):
         """
-        查询生成任务状态
-        返回: GenerateResult 对象
+        Query generation task status
+        Returns: GenerateResult object
         """
         uri = "/api/generate/webui/status"
         
@@ -187,7 +196,7 @@ class LibLibClient:
     
     def download_and_convert_image(self, image_url):
         """
-        下载图片并转换为tensor
+        Download image and convert to tensor
         """
         with requests.get(image_url, stream=True) as req:
             image_data = req.content

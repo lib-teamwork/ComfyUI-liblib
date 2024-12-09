@@ -18,7 +18,7 @@ Loads previously saved authentication information from the configuration file.
 ### LibLib Text to Image
 A node for generating images from text. Features include:
 - Input for **prompt**.
-- Selection of model type (**SDXL/FLUX1**).
+- Selection of model name (**Star-3-Alpha**).
 - Option to set the number of images to generate (1-4).
 - Preset aspect ratios:
   - **Square** (1024x1024)
@@ -30,7 +30,7 @@ A node for generating images from text. Features include:
 A node for generating images from reference images. Features include:
 - Input for a reference image.
 - Input for **prompt**.
-- Selection of model type (**SDXL/FLUX1**).
+- Selection of model name (**Star-3-Alpha**).
 - Option to set the number of images to generate (1-4).
 
 ## Usage Workflow
@@ -40,6 +40,12 @@ A node for generating images from reference images. Features include:
 3. Load saved authentication information using the **Load LibLib Auth Info** node.
 4. Connect the authentication information to the **Text to Image** or **Image to Image** node.
 5. Configure the desired parameters and start generating images.
+
+## Workflow Examples
+1. Generate images using text-to-image node [example](./examples/text2img.json)
+2. Generate images using image-to-image node [example](./examples/img2img.json)
+3. Save authentication info to avoid exposure [example](./examples/save_auth_info.json) 
+4. Generate images using saved authentication info [example](./examples/text2img_use_load_auth_info.json)
 
 ## Notes
 
